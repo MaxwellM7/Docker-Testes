@@ -1,0 +1,37 @@
+name: Deploy
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  publish-to-dockerhub:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Login no Docker Hub
+        run: echo "${{ secrets.senha }}" | docker login -u "${{ secrets.usuario }}" --password-stdin
+
+      - name: Build e push o frontend
+        run: |
+          docker build -t ${{ secrets.usuario }}/myapp-frontend ./frontend
+          docker push ${{ secrets.usuario }}/myapp-frontend
+
+      - name: Build e push no backend
+        run: |
+          docker build -t ${{ secrets.usuario }}/myapp-backend ./backend
+          docker push ${{ secrets.usuario }}/myapp-backend
+
+      - name: Build e push na database
+        run: |
+          docker build -t ${{ secrets.usuario }}/myapp-database ./database
+          docker push ${{ secrets.usuario }}/myapp-database
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: publish-to-dockerhub
+    steps:
+      - name: Simulated deploy to production
+        run: echo "Deploying to production"

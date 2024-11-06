@@ -1,0 +1,34 @@
+name: Build e Test
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do codigo
+        uses: actions/checkout@v2
+      - name: Build uma imagem docker no frontend
+        run: docker build -t myapp-frontend ./frontend
+      - name: Rodar testes frontend
+        run: docker run myapp-frontend npm test
+
+  build-and-test-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do codigo
+        uses: actions/checkout@v2
+      - name: Build uma imagem docker no backend
+        run: docker build -t myapp-backend ./backend
+      - name: Roda teste no backend
+        run: docker run myapp-backend npm test
+
+  build-and-test-database:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build uma imagem docker no banco de dados
+        run: docker build -t myapp-database ./database
