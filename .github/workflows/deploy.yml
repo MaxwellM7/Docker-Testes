@@ -12,22 +12,22 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Login no Docker Hub
-        run: echo "${{ secrets.senha }}" | docker login -u "${{ secrets.usuario }}" --password-stdin
+        run: echo "${{ secrets.Senha123456 }}" | docker login -u "${{ secrets.maxwellrd }}" --password-stdin
 
       - name: Build e push o frontend
         run: |
-          docker build -t ${{ secrets.usuario }}/myapp-frontend ./frontend
-          docker push ${{ secrets.usuario }}/myapp-frontend
+          docker build -t ${{ secrets.maxwellrd }}/myapp-frontend ./frontend
+          docker push ${{ secrets.maxwellrd }}/myapp-frontend
 
       - name: Build e push no backend
         run: |
-          docker build -t ${{ secrets.usuario }}/myapp-backend ./backend
-          docker push ${{ secrets.usuario }}/myapp-backend
+          docker build -t ${{ secrets.maxwellrd }}/myapp-backend ./backend
+          docker push ${{ secrets.maxwellrd }}/myapp-backend
 
       - name: Build e push na database
         run: |
-          docker build -t ${{ secrets.usuario }}/myapp-database ./database
-          docker push ${{ secrets.usuario }}/myapp-database
+          docker build -t ${{ secrets.maxwellrd }}/myapp-database ./database
+          docker push ${{ secrets.maxwellrd }}/myapp-database
 
   deploy:
     runs-on: ubuntu-latest
