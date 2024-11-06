@@ -18,12 +18,15 @@ jobs:
 
     - name: Build and push Docker images
       run: |
-        docker build -t myapp-backend ./backend
-        docker build -t myapp-frontend ./frontend
-        docker build -t myapp-database ./database
-        docker push myapp-backend
-        docker push myapp-frontend
-        docker push myapp-database
+        # Construindo as imagens com base nas pastas de cada componente
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/myapp-backend ./backend
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/myapp-frontend ./frontend
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/myapp-database ./database
+        
+        # Fazendo o push das imagens para o Docker Hub
+        docker push ${{ secrets.DOCKER_USERNAME }}/myapp-backend
+        docker push ${{ secrets.DOCKER_USERNAME }}/myapp-frontend
+        docker push ${{ secrets.DOCKER_USERNAME }}/myapp-database
 
     - name: Deploy to production
       run: |
