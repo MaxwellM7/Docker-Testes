@@ -1,0 +1,42 @@
+name: Build and Test Docker Images
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Cache Docker layers
+      uses: actions/cache@v2
+      with:
+        path: /tmp/.buildx-cache
+        key: ${{ runner.os }}-buildx-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-buildx-
+
+    - name: Build frontend Docker image
+      run: docker build -t myapp-frontend ./frontend
+
+    - name: Build backend Docker image
+      run: docker build -t myapp-backend ./backend
+
+    - name: Build database Docker image
+      run: docker build -t myapp-database ./database
+
+    - name: Run tests (optional)
+      run: |
+        # Substitua este comando para executar testes reais no backend ou frontend
+        npm test || true
